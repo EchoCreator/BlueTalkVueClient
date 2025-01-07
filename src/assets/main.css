@@ -1,0 +1,42 @@
+:root {
+    --theme-color: #626aef;
+    --login-form-font-size: 1.8rem;
+    --theme-color-red: #eb432c;
+    --grey-bg: #dddddd;
+}
+
+* {
+    margin: 0;
+    font-family: "微软雅黑";
+}
+
+html {
+    font-size: 62.5%;
+}
+
+.login-form .nut-form .nut-input,
+.login-form .nut-form .nut-input .input-text,
+.login-form .nut-form .nut-button {
+    font-size: var(--login-form-font-size);
+}
+
+.nut-sticky__box {
+    margin-top: 5.5rem;
+}
+
+.nut-swiper-item {
+    height: auto !important;
+}
+
+.nut-progress-outer{
+    background-color: var(--grey-bg) !important;
+}
+
+.nut-tabs__titles-item__text{
+    font-size: 1.6rem !important;
+    margin-bottom: 0.5rem;
+}
+
+.nut-tabs__titles-item__line{
+    border-radius: 0.5rem !important;
+}
