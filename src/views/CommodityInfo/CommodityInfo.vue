@@ -37,7 +37,7 @@ const getCommodityInfo = async () => {
 };
 getCommodityInfo();
 
-// 查看所有评论
+// 查看该商品的所有评论
 const showComments = () => {
   router.push({ path: "/commodityComments", query: { id: route.query.id } });
 };
