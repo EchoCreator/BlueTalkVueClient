@@ -24,7 +24,6 @@ const commodityInfo = ref({
 });
 const getCommodityInfo = async () => {
   const result = await getCommodityInfoService(route.query.id);
-  console.log(result.data);
   if (result.code === 0) {
     commodityInfo.value = result.data;
     if (commodityInfo.value.commodityCommentsList.length !== 0) {
