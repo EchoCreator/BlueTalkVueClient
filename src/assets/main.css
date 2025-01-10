@@ -1,8 +1,12 @@
+@import "../../public/fonts/font.css";
+
 :root {
     --theme-color: #626aef;
     --login-form-font-size: 1.8rem;
     --theme-color-red: #eb432c;
+    --theme-color-orange: #ff7802;
     --grey-bg: #dddddd;
+    --dark-grey-bg: #707070;
 }
 
 * {
@@ -28,15 +32,15 @@ html {
     height: auto !important;
 }
 
-.nut-progress-outer{
+.nut-progress-outer {
     background-color: var(--grey-bg) !important;
 }
 
-.nut-tabs__titles-item__text{
+.nut-tabs__titles-item__text {
     font-size: 1.6rem !important;
     margin-bottom: 0.5rem;
 }
 
-.nut-tabs__titles-item__line{
+.nut-tabs__titles-item__line {
     border-radius: 0.5rem !important;
 }

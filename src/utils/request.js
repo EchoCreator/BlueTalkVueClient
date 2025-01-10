@@ -13,6 +13,8 @@ instance.interceptors.request.use(
   (config) => {
     const token = tokenStore.token;
     if (token) {
+      console.log(token);
+      
       config.headers.Authorization = token;
     }
     return config;

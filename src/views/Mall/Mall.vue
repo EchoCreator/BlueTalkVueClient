@@ -40,10 +40,19 @@ const router = useRouter();
 const showCommodityInfo = (id) => {
   router.push({ path: "/commodityInfo", query: { id: id } });
 };
+
+// 跳转优惠券页面
+const showVouchersPage = () => {
+  router.push("/vouchers");
+};
 </script>
 
 <template>
-  <nut-searchbar v-model="inputValue" input-background="#dbdbdb" @clear="getCommodity">
+  <nut-searchbar
+    v-model="inputValue"
+    input-background="#dbdbdb"
+    @clear="getCommodity"
+  >
     <template #leftin>
       <Search2 />
     </template>
@@ -67,6 +76,15 @@ const showCommodityInfo = (id) => {
       :title="item.name"
       :pane-key="item.id"
     >
+      <div class="voucher" @click="showVouchersPage">
+        <img src="../../../public/images/icon/CNY.png" alt="" />
+        <div class="text">
+          <p>新春佳节</p>
+          <p>买新衣美食</p>
+          <p>来抢大额</p>
+          <p class="main-text">优惠券</p>
+        </div>
+      </div>
       <nut-empty
         description="这里没有商品，还是看看别的吧"
         v-if="commodityList.length === 0"
@@ -145,5 +163,26 @@ const showCommodityInfo = (id) => {
 .commodity .commodity-card .sold {
   font-size: 1.3rem;
   color: #8a8a8a;
+}
+.voucher {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+.voucher .text {
+  display: flex;
+  flex-direction: column;
+}
+.voucher .text p {
+  font-family: "SmileySans";
+}
+.voucher .text .main-text {
+  font-size: 3rem;
+  color: var(--theme-color-red);
+}
+.voucher img {
+  width: 20rem;
 }
 </style>

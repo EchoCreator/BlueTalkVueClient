@@ -53,6 +53,12 @@ export const router = createRouter({
         import("../views/CommodityComments/CommodityComments.vue"),
     },
     {
+      path: "/vouchers",
+      name: "vouchers",
+      component: () =>
+        import("../views/Vouchers/Vouchers.vue"),
+    },
+    {
       path: "/login",
       name: "login",
       component: () => import("../views/Login.vue"),

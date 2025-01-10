@@ -181,6 +181,7 @@ const showCommodityInfo = (id) => {
 }
 .header .introduction {
   font-size: 1.5rem;
+  white-space: pre-line;
 }
 .header .tags {
   display: flex;
