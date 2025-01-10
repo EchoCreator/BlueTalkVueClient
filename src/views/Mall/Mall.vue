@@ -43,7 +43,7 @@ const showCommodityInfo = (id) => {
 </script>
 
 <template>
-  <nut-searchbar v-model="inputValue" input-background="#dbdbdb">
+  <nut-searchbar v-model="inputValue" input-background="#dbdbdb" @clear="getCommodity">
     <template #leftin>
       <Search2 />
     </template>

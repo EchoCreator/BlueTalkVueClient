@@ -4,9 +4,9 @@ export const getCommodityTypeService = () => {
   return request.get("/user/commodity/commodityType");
 };
 
-export const getCommodityService = (name, type) => {
+export const getCommodityService = (name, typeId) => {  
   return request.get(
-    "/user/commodity/getCommodity?name=" + name + "&type=" + type
+    "/user/commodity/getCommodity?name=" + name + "&typeId=" + typeId
   );
 };
 
