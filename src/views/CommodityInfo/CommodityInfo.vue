@@ -9,7 +9,7 @@ import { useUserInfoStore } from "@/stores/userInfo.js";
 
 const route = useRoute();
 const router = useRouter();
-const useUserInfo = useUserInfoStore();
+const userInfoStore = useUserInfoStore();
 
 // 获取商品信息
 const score = ref(0);
@@ -44,7 +44,7 @@ const showComments = () => {
 
 // 进入用户主页
 const showUserInfo = (id) => {
-  if (useUserInfo.userInfo.id === id) {
+  if (userInfoStore.userInfo.id === id) {
     router.push("/profile");
   } else {
     router.push({ path: "/userPage", query: { id: id } });

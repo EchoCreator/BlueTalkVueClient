@@ -126,50 +126,14 @@ const showVouchersPage = () => {
 .nut-tab-pane {
   padding-top: 1rem;
 }
-.commodity {
-  width: 100%;
-  -moz-column-count: 2; /* Firefox */
-  -webkit-column-count: 2; /* Safari 和 Chrome */
-  column-count: 2;
-  column-width: 45%;
-}
-.commodity .commodity-card {
-  width: 100%;
-  margin-bottom: 1.5rem;
-  -moz-break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  break-inside: avoid;
-  float: left;
-}
-.commodity .commodity-card img {
-  width: 100%;
-  border-radius: 0.5rem;
-}
-.commodity .commodity-card .commodity-name {
-  font-size: 1.6rem;
-  height: 4rem;
-  overflow: hidden;
-  margin-top: 0.5rem;
-}
-.commodity .commodity-card .price-sold {
-  display: flex;
-  align-items: center;
-  margin-top: 0.5rem;
-}
-.commodity .commodity-card .price {
-  font-size: 1.6rem;
-  margin-right: 1rem;
-}
-.commodity .commodity-card .sold {
-  font-size: 1.3rem;
-  color: #8a8a8a;
-}
+
 .voucher {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 2rem;
+  position: relative;
 }
 .voucher .text {
   display: flex;

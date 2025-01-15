@@ -8,7 +8,7 @@ import { useUserInfoStore } from "@/stores/userInfo";
 
 const route = useRoute();
 const router = useRouter();
-const useUserInfo = useUserInfoStore();
+const userInfoStore = useUserInfoStore();
 
 // 获取所有评论
 const comments = ref([]);
@@ -47,7 +47,7 @@ getCommodityComments();
 
 // 进入用户主页
 const showUserInfo = (id) => {
-  if (useUserInfo.userInfo.id === id) {
+  if (userInfoStore.userInfo.id === id) {
     router.push("/profile");
   } else {
     router.push({ path: "/userPage", query: { id: id } });

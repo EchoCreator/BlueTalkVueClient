@@ -59,6 +59,12 @@ export const router = createRouter({
         import("../views/Vouchers/Vouchers.vue"),
     },
     {
+      path: "/blog",
+      name: "blog",
+      component: () =>
+        import("../views/Blog/Blog.vue"),
+    },
+    {
       path: "/login",
       name: "login",
       component: () => import("../views/Login.vue"),
