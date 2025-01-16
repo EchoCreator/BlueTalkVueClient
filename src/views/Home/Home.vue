@@ -42,7 +42,7 @@ const likeBlog = async (blogId, isLiked, index) => {
 <template>
   <nut-searchbar
     v-model="inputValue"
-    input-background="#dbdbdb"
+    input-background="var(--grey-bg2)"
     @clear="getCommodity"
   >
     <template #leftin>

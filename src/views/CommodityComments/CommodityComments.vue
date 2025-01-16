@@ -152,7 +152,7 @@ const showUserInfo = (id) => {
 .comment-info .comment-container {
   padding: 2rem 0;
   font-size: 1.6rem;
-  border-bottom: 0.1rem solid #b8b6b6;
+  border-bottom: 0.05rem solid var(--theme-color-grey-underline);
 }
 .comment-info .comment-container:last-child {
   border-bottom: 0;
@@ -161,7 +161,7 @@ const showUserInfo = (id) => {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
-  color: #707070;
+  color: var(--theme-color-grey-text);
 }
 .avatar {
   width: 4.5rem;

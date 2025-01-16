@@ -6,8 +6,12 @@
     --theme-color-red: #eb432c;
     --theme-color-orange: #ff7802;
     --theme-color-yellow: #fbcd31;
-    --theme-color-grey: #c9c6c6;
+    --theme-color-grey-grey-bg: #e6e6e6;
+    --theme-color-grey-underline: #8a8a8a;
+    --theme-color-grey-text: #8a8a8a;
     --grey-bg: #e6e6e6;
+    --grey-bg2: #dbdbdb;
+    --grey-bg3: #515151;
     --dark-grey-bg: #707070;
     --tag-color: #4e5da0;
 }
@@ -55,18 +59,19 @@ html {
 }
 
 /* textarea */
-.nut-textarea{
+.nut-textarea {
     padding: 0 !important;
 }
+
 .nut-textarea__textarea {
-    background-color: #dbdbdb !important;
+    background-color: var(--grey-bg2) !important;
     padding: 1rem !important;
     box-sizing: border-box;
     border-radius: 1rem;
 }
 
 /* action-sheet */
-.nut-popup{
+.nut-popup {
     border-radius: 0 !important;
 }
 
@@ -195,5 +200,11 @@ html {
 
 .commodity .commodity-card .sold {
     font-size: 1.3rem;
-    color: #8a8a8a;
+    color: var(--theme-color-grey-text);
+}
+
+/* uploader */
+.nut-uploader__upload {
+    background-color: var(--grey-bg2) !important;
+    border-radius: 1rem;
 }

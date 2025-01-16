@@ -224,7 +224,7 @@ const showUserInfo = (id) => {
 .info-container .user-info .fans {
   font-size: 1.6rem;
   margin-right: 1rem;
-  color: #707070;
+  color: var(--theme-color-grey-text);
 }
 .info-container .user-info .navigate {
   display: flex;
@@ -267,7 +267,7 @@ const showUserInfo = (id) => {
 }
 .info-container .delivery-info .address {
   font-size: 1.3rem;
-  color: #707070;
+  color: var(--theme-color-grey-text);
 }
 
 .info-container .comment-info {
@@ -290,6 +290,6 @@ const showUserInfo = (id) => {
   display: flex;
   align-items: center;
   margin-bottom: 0.5rem;
-  color: #707070;
+  color: var(--theme-color-grey-text);
 }
 </style>

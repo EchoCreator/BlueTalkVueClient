@@ -27,3 +27,7 @@ export const favoriteBlogService = (blogId) => {
 export const postBlogCommentService = (blogComment) => {
   return request.post("/user/blog/postBlogComment", blogComment);
 };
+
+export const postBlogService = (blog) => {
+  return request.post("/user/blog/postBlog", blog);
+};

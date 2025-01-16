@@ -149,7 +149,7 @@ const login = async () => {
 }
 .login-form .prompt {
   font-size: 1.5rem;
-  color: #707070;
+  color: var(--theme-color-grey-text);
 }
 .login-form .nut-form {
   width: 100%;

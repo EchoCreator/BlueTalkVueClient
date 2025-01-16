@@ -10,6 +10,7 @@ import {
   Star,
   StarFillN,
   Message,
+  Location2,
 } from "@nutui/icons-vue";
 
 import {
@@ -33,7 +34,6 @@ const getBlogContent = async () => {
   const result = await getBlogContentService(route.query.id);
   if (result.code === 0) {
     blogContent.value = result.data;
-    console.log(result.data);
   }
 };
 getBlogContent();
@@ -161,7 +161,7 @@ const postBlogComment = async () => {
     <div class="blog-content">
       <div class="title">{{ blogContent.blog.title }}</div>
       <div class="content">{{ blogContent.blog.content }}</div>
-      <div class="tags">
+      <div class="tags" v-if="blogContent.blog.tags!==null">
         <div
           class="tag"
           v-for="(item, index) in blogContent.blog.tags.split(',')"
@@ -170,6 +170,11 @@ const postBlogComment = async () => {
           #{{ item }}
         </div>
       </div>
+      <div class="address" v-if="blogContent.blog.address !== null">
+        <Location2 />
+        <div>{{ blogContent.blog.address }}</div>
+      </div>
+      <div class="time">{{ blogContent.blog.createTime }}</div>
       <div class="underline"></div>
     </div>
   </div>
@@ -215,6 +220,7 @@ const postBlogComment = async () => {
           >
             {{ item.content }}
           </div>
+          <div class="time">{{ item.createTime.slice(0, 16) }}</div>
           <div
             class="reply-comments"
             v-for="citem in item.childrenComments"
@@ -267,6 +273,7 @@ const postBlogComment = async () => {
                     >:</span
                   >{{ citem.content }}
                 </div>
+                <div class="time">{{ citem.createTime.slice(0, 16) }}</div>
               </div>
               <div class="likes">
                 <HeartFill2 />
@@ -351,7 +358,7 @@ const postBlogComment = async () => {
   align-items: center;
 }
 .writer-info .avatar {
-  width: 4rem;
+  width: 4.5rem;
   border-radius: 50%;
   margin-right: 1rem;
 }
@@ -410,35 +417,30 @@ const postBlogComment = async () => {
 }
 .blog .underline {
   width: 100%;
-  height: 0.1rem;
-  background-color: var(--theme-color-grey);
+  height: 0.05rem;
+  background-color: var(--theme-color-grey-underline);
   margin-top: 2rem;
 }
-.blog .profile {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.blog .time {
+  font-size: 1.6rem;
   margin-top: 1rem;
+  color: var(--theme-color-grey-text);
 }
-.blog .avatar-name {
+.blog .address {
+  width: 100%;
+  padding: 0.8rem 1.5rem;
+  box-sizing: border-box;
+  border-radius: 0.8rem;
+  background-color: var(--grey-bg);
+  font-size: 1.8rem;
+  margin-top: 1rem;
   display: flex;
   align-items: center;
 }
-.blog .avatar {
-  width: 2.5rem;
-  border-radius: 50%;
-  margin-right: 1rem;
-}
-.blog .name {
-  font-size: 1.2rem;
-}
-.blog .likes {
-  display: flex;
-  align-items: center;
-}
-.blog .likes-num {
-  margin-left: 0.3rem;
-  font-size: 1.2rem;
+.blog .address div{
+  margin-left: 0.5rem;
+  position: relative;
+  bottom: 0.1rem;
 }
 
 .comments {
@@ -450,7 +452,7 @@ const postBlogComment = async () => {
 }
 .comments .num {
   font-size: 1.6rem;
-  color: #515151;
+  color: var(--theme-color-grey-text);
   margin-bottom: 2rem;
 }
 .comments .comment-card {
@@ -484,7 +486,7 @@ const postBlogComment = async () => {
   width: 70%;
 }
 .comments .comment-content .name {
-  color: #515151;
+  color: var(--theme-color-grey-text);
   margin-bottom: 0.5rem;
   display: flex;
   align-items: center;
@@ -499,14 +501,14 @@ const postBlogComment = async () => {
   font-size: 1.3rem;
   margin-left: 0.8rem;
 }
-.comments .me-label{
+.comments .me-label {
   background-color: var(--theme-color);
 }
 .comments .reply-comments {
   margin-top: 2rem;
 }
 .comments .reply-username {
-  color: #515151 !important;
+  color: var(--theme-color-grey-text) !important;
 }
 .comments .likes {
   width: 10%;
@@ -519,6 +521,10 @@ const postBlogComment = async () => {
 }
 .comments .likes div {
   margin-top: 0.5rem;
+}
+.comments .time {
+  margin-top: 0.5rem;
+  color: var(--theme-color-grey-text);
 }
 
 .bottom {
@@ -544,10 +550,10 @@ const postBlogComment = async () => {
 }
 .bottom .input-button {
   font-size: 1.5rem;
-  background-color: #dbdbdb;
+  background-color: var(--grey-bg2);
   padding: 1rem 1.5rem;
   border-radius: 2rem;
-  color: #515151;
+  color: var(--theme-color-grey-text);
 }
 .sheet-content {
   display: flex;

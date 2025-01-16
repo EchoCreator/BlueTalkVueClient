@@ -20,11 +20,6 @@ export const router = createRouter({
           component: () => import("../views/Mall/Mall.vue"),
         },
         {
-          path: "/upload",
-          name: "upload",
-          component: () => import("../views/Upload/Upload.vue"),
-        },
-        {
           path: "/message",
           name: "message",
           component: () => import("../views/Message/Message.vue"),
@@ -35,6 +30,11 @@ export const router = createRouter({
           component: () => import("../views/Profile/Profile.vue"),
         },
       ],
+    },
+    {
+      path: "/upload",
+      name: "upload",
+      component: () => import("../views/Upload/Upload.vue"),
     },
     {
       path: "/userPage",
@@ -55,14 +55,12 @@ export const router = createRouter({
     {
       path: "/vouchers",
       name: "vouchers",
-      component: () =>
-        import("../views/Vouchers/Vouchers.vue"),
+      component: () => import("../views/Vouchers/Vouchers.vue"),
     },
     {
       path: "/blog",
       name: "blog",
-      component: () =>
-        import("../views/Blog/Blog.vue"),
+      component: () => import("../views/Blog/Blog.vue"),
     },
     {
       path: "/login",
