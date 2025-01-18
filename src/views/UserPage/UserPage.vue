@@ -28,6 +28,7 @@ const getUserInfo = async () => {
     getUsersCommodity();
     getUsersBlogs();
     getUsersLikedFavoriteBlogs();
+    isFollowedFunction(route.query.id);
   }
 };
 getUserInfo();
@@ -121,6 +122,54 @@ const showBlogContent = (id) => {
 const showCommodityInfo = (id) => {
   router.push({ path: "/commodityInfo", query: { id: id } });
 };
+
+// 跳转关注粉丝界面
+const showFollow = (id, username, type) => {
+  router.push({
+    path: "/follow",
+    query: { id: id, username: username, type: type },
+  });
+};
+
+// 是否关注
+import { isFollowedService, followUserService } from "@/api/follow";
+const isFollowed = ref(0);
+const isFollowedFunction = async (userId) => {
+  if (route.query.id != userInfoStore.userInfo.id) {
+    const result = await isFollowedService(userId);
+    if (result.code === 0) {
+      isFollowed.value = result.data;
+    }
+  }
+};
+
+// 关注和取关
+import { showToast, showDialog } from "@nutui/nutui";
+const followUser = async (followUserId, isFollowedParam) => {
+  if (isFollowedParam === 1) {
+    showDialog({
+      overlayStyle: { background: "rgba(0,0,0,0.5)" },
+      content: "你确定要取消关注吗？",
+      onOk: async () => {
+        const result = await followUserService(followUserId, isFollowedParam);
+        if (result.code === 0) {
+          isFollowed.value = 0;
+          showToast.text("取消关注成功", {
+            size: "small",
+          });
+        }
+      },
+    });
+  } else {
+    const result = await followUserService(followUserId, isFollowedParam);
+    if (result.code === 0) {
+      isFollowed.value = 1;
+      showToast.text("关注成功！", {
+        size: "small",
+      });
+    }
+  }
+};
 </script>
 
 <template>
@@ -184,11 +233,17 @@ const showCommodityInfo = (id) => {
     </div>
     <div class="data-follow">
       <div class="data">
-        <div class="followee data-content">
+        <div
+          class="followee data-content"
+          @click="showFollow(userInfo.id, userInfo.username, '2')"
+        >
           <div class="number">{{ userInfo.followee }}</div>
           关注
         </div>
-        <div class="fans data-content">
+        <div
+          class="fans data-content"
+          @click="showFollow(userInfo.id, userInfo.username, '3')"
+        >
           <div class="number">{{ userInfo.fans }}</div>
           粉丝
         </div>
@@ -202,8 +257,21 @@ const showCommodityInfo = (id) => {
             <Message />
           </template>
         </nut-button> -->
-        <div class="button follow-button">关注</div>
-        <div class="button"><Message /></div>
+        <div
+          class="button follow-button"
+          v-if="isFollowed === 0"
+          @click="followUser(userInfo.id, 0)"
+        >
+          关注
+        </div>
+        <div
+          class="button follow-button is-followed"
+          v-if="isFollowed === 1"
+          @click="followUser(userInfo.id, 1)"
+        >
+          已关注
+        </div>
+        <Message />
       </div>
     </div>
   </div>
@@ -453,36 +521,25 @@ const showCommodityInfo = (id) => {
   align-items: center;
   justify-content: space-between;
 }
-.header .follow{
-  display: flex;
-}
-.header .follow .button{
-  width: 5rem;
-  height: 3rem;
+.header .follow {
   display: flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.3rem;
-  border-radius: 1.5rem;
-  background-color: #fff;
-  color: #000;
-  margin-left: 1rem;
+  font-size: 1.5rem;
 }
-.header .follow .follow-button{
-  width: 10rem;
-  height: 3.2rem;
-  color: #fff;
+.header .follow-button {
+  margin-right: 1.5rem;
   background-color: var(--theme-color-red);
+  color: #fff;
 }
-/* .header .follow .nut-button {
-  width: 5rem;
-  height: 3rem !important;
-  margin-left: 1rem;
-  font-size: 1.3rem;
+.header .is-followed{
+  background-color: var(--theme-color);
+  border-color: #fff;
 }
-.header .follow .nut-button:first-child {
-  width: 8rem;
-} */
+.header .follow .nut-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
 .header .data {
   display: flex;
   font-size: 1.5rem;

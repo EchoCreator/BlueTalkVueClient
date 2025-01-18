@@ -37,6 +37,11 @@ export const router = createRouter({
       component: () => import("../views/Upload/Upload.vue"),
     },
     {
+      path: "/follow",
+      name: "follow",
+      component: () => import("../views/Follow/Follow.vue"),
+    },
+    {
       path: "/userPage",
       name: "userPage",
       component: () => import("../views/UserPage/UserPage.vue"),

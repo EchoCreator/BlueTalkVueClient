@@ -34,6 +34,7 @@ const getBlogContent = async () => {
   const result = await getBlogContentService(route.query.id);
   if (result.code === 0) {
     blogContent.value = result.data;
+    isFollowedFunction(blogContent.value.blog.userId);
   }
 };
 getBlogContent();
@@ -91,7 +92,7 @@ const showSheet = (parentId, replyId, replyUserId, replyUsername) => {
   sheetVisible.value = true;
 };
 
-import { showToast } from "@nutui/nutui";
+import { showToast, showDialog } from "@nutui/nutui";
 const postBlogComment = async () => {
   const blogComment = {
     blogId: route.query.id,
@@ -108,6 +109,45 @@ const postBlogComment = async () => {
       size: "small",
     });
     getBlogContent();
+  }
+};
+
+// 是否关注
+import { isFollowedService, followUserService } from "@/api/follow";
+const isFollowed = ref(0);
+const isFollowedFunction = async (userId) => {
+  if (route.query.id != userInfoStore.userInfo.id) {
+    const result = await isFollowedService(userId);
+    if (result.code === 0) {
+      isFollowed.value = result.data;
+    }
+  }
+};
+
+// 关注和取关
+const followUser = async (followUserId, isFollowedParam) => {
+  if (isFollowedParam === 1) {
+    showDialog({
+      overlayStyle: { background: 'rgba(0,0,0,0.5)' },
+      content: "你确定要取消关注吗？",
+      onOk: async () => {
+        const result = await followUserService(followUserId, isFollowedParam);
+        if (result.code === 0) {
+          isFollowed.value = 0;
+          showToast.text("取消关注成功", {
+            size: "small",
+          });
+        }
+      },
+    });
+  } else {
+    const result = await followUserService(followUserId, isFollowedParam);
+    if (result.code === 0) {
+      isFollowed.value = 1;
+      showToast.text("关注成功！", {
+        size: "small",
+      });
+    }
   }
 };
 </script>
@@ -137,7 +177,24 @@ const postBlogComment = async () => {
         {{ blogContent.blog.username }}
       </div>
     </div>
-    <div class="follow-button">关注</div>
+    <div
+      class="follow-button"
+      v-if="
+        blogContent.blog.userId != userInfoStore.userInfo.id && isFollowed === 0
+      "
+      @click="followUser(blogContent.blog.userId, 0)"
+    >
+      关注
+    </div>
+    <div
+      class="follow-button is-followed"
+      v-if="
+        blogContent.blog.userId != userInfoStore.userInfo.id && isFollowed === 1
+      "
+      @click="followUser(blogContent.blog.userId, 1)"
+    >
+      已关注
+    </div>
   </div>
   <div class="blog">
     <nut-swiper :loop="false" height="auto" @change="changeSwiper">
@@ -161,7 +218,7 @@ const postBlogComment = async () => {
     <div class="blog-content">
       <div class="title">{{ blogContent.blog.title }}</div>
       <div class="content">{{ blogContent.blog.content }}</div>
-      <div class="tags" v-if="blogContent.blog.tags!==null">
+      <div class="tags" v-if="blogContent.blog.tags !== null">
         <div
           class="tag"
           v-for="(item, index) in blogContent.blog.tags.split(',')"
@@ -362,13 +419,6 @@ const postBlogComment = async () => {
   border-radius: 50%;
   margin-right: 1rem;
 }
-.writer-info .follow-button {
-  padding: 0.5rem 1.5rem;
-  box-sizing: border-box;
-  border-radius: 2rem;
-  color: var(--theme-color-red);
-  border: 0.1rem solid var(--theme-color-red);
-}
 
 .swiper-pagination {
   position: absolute;
@@ -437,7 +487,7 @@ const postBlogComment = async () => {
   display: flex;
   align-items: center;
 }
-.blog .address div{
+.blog .address div {
   margin-left: 0.5rem;
   position: relative;
   bottom: 0.1rem;

@@ -121,6 +121,11 @@ const router = useRouter();
 const showCommodityInfo = (id) => {
   router.push({ path: "/commodityInfo", query: { id: id } });
 };
+
+// 跳转关注和粉丝界面
+const showFollow = (id, type) => {
+  router.push({ path: "/follow", query: { id: id, type: type } });
+};
 </script>
 
 <template>
@@ -178,11 +183,17 @@ const showCommodityInfo = (id) => {
       </div>
     </div>
     <div class="data">
-      <div class="followee data-content">
+      <div
+        class="followee data-content"
+        @click="showFollow(userInfoStore.userInfo.id, '2')"
+      >
         <div class="number">{{ userInfo.followee }}</div>
         关注
       </div>
-      <div class="fans data-content">
+      <div
+        class="fans data-content"
+        @click="showFollow(userInfoStore.userInfo.id, '3')"
+      >
         <div class="number">{{ userInfo.fans }}</div>
         粉丝
       </div>
@@ -286,7 +297,10 @@ const showCommodityInfo = (id) => {
                   @click.stop="likeBlog(item.id, item.isLiked, index, 2)"
                 >
                   <HeartN v-if="item.isLiked === 0" />
-                  <HeartFillN v-if="item.isLiked === 1" color="var(--theme-color-red)" />
+                  <HeartFillN
+                    v-if="item.isLiked === 1"
+                    color="var(--theme-color-red)"
+                  />
                   <div class="likes-num">{{ item.likes }}</div>
                 </div>
               </div>

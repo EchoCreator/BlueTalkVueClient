@@ -35,12 +35,19 @@ html {
     margin-top: 5.5rem;
 }
 
+/* 轮播片 */
 .nut-swiper-item {
     height: auto !important;
 }
 
+/* 进度条 */
 .nut-progress-outer {
     background-color: var(--grey-bg) !important;
+}
+
+/* tabbar */
+.nut-tabbar {
+    bottom: -0.1rem !important;
 }
 
 /* tabs */
@@ -55,7 +62,6 @@ html {
 
 .nut-tab-pane {
     padding: 0 !important;
-    /* height: auto !important; */
 }
 
 /* textarea */
@@ -207,4 +213,38 @@ html {
 .nut-uploader__upload {
     background-color: var(--grey-bg2) !important;
     border-radius: 1rem;
+}
+
+/* dialog */
+.nut-popup {
+    border-radius: 2rem !important;
+}
+
+.nut-dialog {
+    padding: 2rem !important;
+}
+
+.nut-dialog .nut-dialog__content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.6rem !important;
+}
+
+.nut-dialog .nut-button {
+    font-size: 1.6rem !important;
+}
+
+/* follow-button */
+.follow-button {
+    padding: 0.5rem 1.5rem;
+    box-sizing: border-box;
+    border-radius: 2rem;
+    color: var(--theme-color-red);
+    border: 0.1rem solid var(--theme-color-red);
+}
+
+.is-followed {
+    color: var(--theme-color);
+    border-color: var(--tag-color);
 }

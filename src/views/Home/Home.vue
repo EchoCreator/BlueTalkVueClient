@@ -30,10 +30,10 @@ const likeBlog = async (blogId, isLiked, index) => {
   if (result.code === 0) {
     if (isLiked === 0) {
       blogs.value[index].isLiked = 1;
-      blogs.value[index].likes = blogs.value[index].likes+1;
+      blogs.value[index].likes = blogs.value[index].likes + 1;
     } else {
       blogs.value[index].isLiked = 0;
-      blogs.value[index].likes = blogs.value[index].likes-1;
+      blogs.value[index].likes = blogs.value[index].likes - 1;
     }
   }
 };
@@ -53,7 +53,7 @@ const likeBlog = async (blogId, isLiked, index) => {
     </template>
   </nut-searchbar>
 
-  <nut-tabs v-model="tabValue" color="var(--theme-color)" sticky>
+  <nut-tabs auto-height v-model="tabValue" color="var(--theme-color)" sticky>
     <nut-tab-pane title="推荐" pane-key="1">
       <div class="blogs-container">
         <div
