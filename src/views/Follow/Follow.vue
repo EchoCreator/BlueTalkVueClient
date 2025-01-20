@@ -333,4 +333,21 @@ const followUser = async (followUserId, isFollowedParam) => {
   white-space: nowrap;
   color: var(--theme-color-grey-text);
 }
+
+
+
+.blogs-container {
+    width: 100%;
+    /* background-color: var(--grey-bg); */
+    -moz-column-count: 2;
+    /* Firefox */
+    -webkit-column-count: 2;
+    /* Safari 和 Chrome */
+    column-count: 2;
+    column-width: 45%;
+    -webkit-column-gap: 0.5rem;
+    column-gap: 0.5rem;
+    padding-top: 0.3rem;
+    box-sizing: border-box;
+}
 </style>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 
 import { getUserInfoService } from "@/api/user";
 import { getUsersCommodityService } from "@/api/commodity";
@@ -14,6 +14,8 @@ import { HeartN, HeartFillN } from "@nutui/icons-vue";
 import { useUserInfoStore } from "@/stores/userInfo";
 
 const userInfoStore = useUserInfoStore();
+
+import { calWaterfall } from "@/utils/calWaterfall";
 
 // 获得用户信息
 const userInfo = ref({});
@@ -34,22 +36,34 @@ const activeTab = ref("1");
 
 // 获得用户店铺商品
 const commodityList = ref([]);
+const commodityListRef = ref();
 const getUsersCommodity = async () => {
   const result = await getUsersCommodityService(userInfo.value.id);
   if (result.code === 0) {
-    if (result.data !== null) {
+    if (result.data !== null && result.data.length !== 0) {
       commodityList.value = result.data;
+      nextTick(() => {
+        setTimeout(() => {
+          calWaterfall(commodityListRef.value);
+        }, 200);
+      });
     }
   }
 };
 
 // 获得用户帖子
 const usersBlogs = ref([]);
+const usersBlogsRef = ref();
 const getUsersBlogs = async () => {
   const result = await getUsersBlogsService(userInfo.value.id);
   if (result.code === 0) {
-    if (result.data !== null) {
+    if (result.data !== null && result.data.length !== 0) {
       usersBlogs.value = result.data;
+      nextTick(() => {
+        setTimeout(() => {
+          calWaterfall(usersBlogsRef.value);
+        }, 200);
+      });
     }
   }
 };
@@ -57,16 +71,25 @@ const getUsersBlogs = async () => {
 // 获得用户点赞收藏帖子
 const usersLikedBlogs = ref([]);
 const usersFavoriteBlogs = ref([]);
+const userslikedBlogsRef = ref();
+const usersfavoriteBlogsRef = ref();
 const getUsersLikedFavoriteBlogs = async () => {
   const result = await getUsersLikedFavoriteBlogsService(userInfo.value.id);
   if (result.code === 0) {
-    if (result.data !== null) {
+    if (result.data !== null && result.data.length !== 0) {
       usersLikedBlogs.value = result.data.filter((v) => {
         return v.isLiked === 1;
       });
 
       usersFavoriteBlogs.value = result.data.filter((v) => {
         return v.isFavorite === 1;
+      });
+
+      nextTick(() => {
+        setTimeout(() => {
+          calWaterfall(userslikedBlogsRef.value);
+          calWaterfall(usersfavoriteBlogsRef.value);
+        }, 200);
       });
     }
   }
@@ -211,7 +234,7 @@ const showFollow = (id, type) => {
           description="你还没有发布笔记，试着分享一下你的见闻吧"
           v-if="usersBlogs.length === 0"
         ></nut-empty>
-        <div class="blogs-container">
+        <div class="blogs-container" ref="usersBlogsRef">
           <div
             class="blog"
             v-for="(item, index) in usersBlogs"
@@ -262,7 +285,7 @@ const showFollow = (id, type) => {
           description="你还没有点赞任何笔记"
           v-if="usersLikedBlogs.length === 0"
         ></nut-empty>
-        <div class="blogs-container">
+        <div class="blogs-container" ref="userslikedBlogsRef">
           <div
             class="blog"
             v-for="(item, index) in usersLikedBlogs"
@@ -313,7 +336,7 @@ const showFollow = (id, type) => {
           description="你还没有收藏任何笔记"
           v-if="usersFavoriteBlogs.length === 0"
         ></nut-empty>
-        <div class="blogs-container">
+        <div class="blogs-container" ref="usersfavoriteBlogsRef">
           <div
             class="blog"
             v-for="(item, index) in usersFavoriteBlogs"
@@ -360,7 +383,7 @@ const showFollow = (id, type) => {
         </div>
       </nut-tab-pane>
       <nut-tab-pane title="店铺" pane-key="4" v-if="commodityList.length !== 0">
-        <div class="commodity">
+        <div class="commodity" ref="commodityListRef">
           <div
             class="commodity-card"
             v-for="item in commodityList"

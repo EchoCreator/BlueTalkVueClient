@@ -31,3 +31,9 @@ export const postBlogCommentService = (blogComment) => {
 export const postBlogService = (blog) => {
   return request.post("/user/blog/postBlog", blog);
 };
+
+export const getFolloweeBlogsService = (minTime, offset) => {
+  return request.get(
+    "/user/blog/getFolloweeBlogs?minTime=" + minTime + "&offset=" + offset
+  );
+};

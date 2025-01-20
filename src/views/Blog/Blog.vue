@@ -128,7 +128,7 @@ const isFollowedFunction = async (userId) => {
 const followUser = async (followUserId, isFollowedParam) => {
   if (isFollowedParam === 1) {
     showDialog({
-      overlayStyle: { background: 'rgba(0,0,0,0.5)' },
+      overlayStyle: { background: "rgba(0,0,0,0.5)" },
       content: "你确定要取消关注吗？",
       onOk: async () => {
         const result = await followUserService(followUserId, isFollowedParam);
@@ -196,7 +196,7 @@ const followUser = async (followUserId, isFollowedParam) => {
       已关注
     </div>
   </div>
-  <div class="blog">
+  <div class="blog-page">
     <nut-swiper :loop="false" height="auto" @change="changeSwiper">
       <nut-swiper-item
         v-for="(item, index) in blogContent.blog.images.split(',')"
@@ -375,23 +375,25 @@ const followUser = async (followUserId, isFollowedParam) => {
       <div>{{ blogContent.blog.comments }}</div>
     </div>
   </div>
-  <nut-action-sheet v-model:visible="sheetVisible">
-    <div class="sheet-content">
-      <nut-textarea
-        v-model="commentInput"
-        :rows="3"
-        autosize
-        :placeholder="placeholder"
-        autofocus
-      />
-      <nut-button
-        color="var(--theme-color)"
-        :disabled="commentInput === ''"
-        @click="postBlogComment"
-        >发送</nut-button
-      >
-    </div>
-  </nut-action-sheet>
+  <div class="input-action-sheet">
+    <nut-action-sheet v-model:visible="sheetVisible">
+      <div class="sheet-content">
+        <nut-textarea
+          v-model="commentInput"
+          :rows="3"
+          autosize
+          :placeholder="placeholder"
+          autofocus
+        />
+        <nut-button
+          color="var(--theme-color)"
+          :disabled="commentInput === ''"
+          @click="postBlogComment"
+          >发送</nut-button
+        >
+      </div>
+    </nut-action-sheet>
+  </div>
 </template>
 
 <style scoped>
@@ -432,51 +434,51 @@ const followUser = async (followUserId, isFollowedParam) => {
   color: #fff;
   font-size: 14px;
 }
-.blog {
+.blog-page {
   width: 100%;
   margin: 0.3rem 0;
   margin-top: 7rem;
   border-radius: 0.5rem;
   overflow: hidden;
 }
-.blog .blog-image {
+.blog-page .blog-image {
   width: 100%;
 }
-.blog .blog-content {
+.blog-page .blog-content {
   padding: 1.5rem;
   box-sizing: border-box;
 }
-.blog .title {
+.blog-page .title {
   font-size: 2rem;
   font-weight: 600;
 }
-.blog .content {
+.blog-page .content {
   font-size: 1.8rem;
   margin-top: 1rem;
 }
-.blog .tags {
+.blog-page .tags {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   margin-top: 1rem;
 }
-.blog .tags .tag {
+.blog-page .tags .tag {
   font-size: 1.8rem;
   margin-right: 1rem;
   color: var(--tag-color);
 }
-.blog .underline {
+.blog-page .underline {
   width: 100%;
   height: 0.05rem;
   background-color: var(--theme-color-grey-underline);
   margin-top: 2rem;
 }
-.blog .time {
+.blog-page .time {
   font-size: 1.6rem;
   margin-top: 1rem;
   color: var(--theme-color-grey-text);
 }
-.blog .address {
+.blog-page .address {
   width: 100%;
   padding: 0.8rem 1.5rem;
   box-sizing: border-box;
@@ -487,7 +489,7 @@ const followUser = async (followUserId, isFollowedParam) => {
   display: flex;
   align-items: center;
 }
-.blog .address div {
+.blog-page .address div {
   margin-left: 0.5rem;
   position: relative;
   bottom: 0.1rem;
@@ -614,5 +616,9 @@ const followUser = async (followUserId, isFollowedParam) => {
 .sheet-content .nut-button {
   width: 7rem;
   margin-top: 1rem;
+}
+
+.input-action-sheet ::v-deep(.nut-popup){
+  border-radius: 0 !important;
 }
 </style>

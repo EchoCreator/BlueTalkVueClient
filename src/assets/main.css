@@ -14,7 +14,9 @@
     --grey-bg3: #515151;
     --dark-grey-bg: #707070;
     --tag-color: #4e5da0;
+    --nut-infiniteloading-bottom-color: var(--theme-color-grey-text);
 }
+
 
 * {
     margin: 0;
@@ -76,36 +78,28 @@ html {
     border-radius: 1rem;
 }
 
-/* action-sheet */
-.nut-popup {
-    border-radius: 0 !important;
-}
-
 /* blog */
 .blogs-container {
     width: 100%;
-    /* background-color: var(--grey-bg); */
-    -moz-column-count: 2;
-    /* Firefox */
-    -webkit-column-count: 2;
-    /* Safari 和 Chrome */
-    column-count: 2;
-    column-width: 45%;
-    -webkit-column-gap: 0.5rem;
-    column-gap: 0.5rem;
-    padding-top: 0.3rem;
-    box-sizing: border-box;
+    position: relative;
+    /* display: grid;
+    grid-auto-rows: 5px;
+    grid-template-columns: repeat(auto-fill, calc(50% - 5px));
+    align-items: start;
+    justify-content: space-between; */
 }
 
 .blog {
-    width: 100%;
-    background-color: #fff;
+    width: 49.8%;
+    position: absolute;
+    /* background-color: #fff;
     -moz-break-inside: avoid;
     -webkit-column-break-inside: avoid;
     break-inside: avoid;
-    float: left;
-    margin: 0.3rem 0;
+    float: left; 
+    margin: 0.3rem 0; */
     border-radius: 0.5rem;
+    overflow: hidden;
 }
 
 .blog .blog-image {
@@ -161,24 +155,27 @@ html {
 
 /* commodity */
 .commodity {
-    width: 100%;
-    -moz-column-count: 2;
-    /* Firefox */
+    width: 96%;
+    position: relative;
+    margin: 0 auto;
+    /* -moz-column-count: 2;
     -webkit-column-count: 2;
-    /* Safari 和 Chrome */
     column-count: 2;
     column-width: 45%;
     padding: 0 2rem;
-    box-sizing: border-box;
+    box-sizing: border-box; */
 }
 
 .commodity .commodity-card {
-    width: 100%;
-    margin-bottom: 1.5rem;
+    width: 49%;
+    position: absolute;
+    padding: 0.5rem 0;
+    box-sizing: border-box;
+    /* margin-bottom: 1.5rem;
     -moz-break-inside: avoid;
     -webkit-column-break-inside: avoid;
     break-inside: avoid;
-    float: left;
+    float: left; */
 }
 
 .commodity .commodity-card img {
@@ -191,6 +188,7 @@ html {
     height: 4rem;
     overflow: hidden;
     margin-top: 0.5rem;
+
 }
 
 .commodity .commodity-card .price-sold {
@@ -247,4 +245,10 @@ html {
 .is-followed {
     color: var(--theme-color);
     border-color: var(--tag-color);
+}
+
+/* 下拉加载和上拉刷新 */
+.nut-infinite__bottom-box__text,
+.nut-infinite__bottom-tips {
+    font-size: 1.6rem !important;
 }

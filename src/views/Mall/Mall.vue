@@ -1,11 +1,12 @@
 <script setup>
-import { ref } from "vue";
+import { nextTick, ref } from "vue";
 import { Search2 } from "@nutui/icons-vue";
 
 import { getCommodityTypeService, getCommodityService } from "@/api/commodity";
 
 // tabs切换
-const activeTab = ref(null);
+const activeTab = ref(0);
+const tabIndex = ref(0);
 
 // 商品类别
 const commodityType = ref([]);
@@ -18,19 +19,27 @@ const getCommodityType = async () => {
       name: "全部",
       sort: 0,
     });
-    activeTab.value = result.data[0].id;
+    // activeTab.value = result.data[0].id;
     getCommodity();
   }
 };
 getCommodityType();
 
 // 搜索商品
+import { calWaterfall } from "@/utils/calWaterfall";
+const commodityListRef = ref();
 const inputValue = ref("");
 const commodityList = ref([]);
 const getCommodity = async () => {
-  const result = await getCommodityService(inputValue.value, activeTab.value);
+  const typeId = parseInt(commodityType.value[activeTab.value].id);
+  const result = await getCommodityService(inputValue.value, typeId);
   if (result.code === 0) {
     commodityList.value = result.data;
+    nextTick(() => {
+      setTimeout(() => {
+        calWaterfall(commodityListRef.value[activeTab.value]);
+      }, 200);
+    });
   }
 };
 
@@ -71,10 +80,10 @@ const showVouchersPage = () => {
     sticky
   >
     <nut-tab-pane
-      v-for="item in commodityType"
+      v-for="(item, index) in commodityType"
       :key="item.id"
       :title="item.name"
-      :pane-key="item.id"
+      :pane-key="index"
     >
       <div class="voucher" @click="showVouchersPage">
         <img src="../../../public/images/icon/CNY.png" alt="" />
@@ -89,7 +98,7 @@ const showVouchersPage = () => {
         description="这里没有商品，还是看看别的吧"
         v-if="commodityList.length === 0"
       ></nut-empty>
-      <div class="commodity">
+      <div class="commodity" ref="commodityListRef">
         <div
           class="commodity-card"
           v-for="item in commodityList"
