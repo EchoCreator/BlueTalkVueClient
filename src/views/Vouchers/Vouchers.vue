@@ -95,6 +95,7 @@ const pickupVoucher = async (voucherId, isPickedUp) => {
   flex-direction: column;
   align-items: center;
   background-color: var(--grey-bg);
+  overflow: scroll;
 }
 .publicity {
   width: 100%;

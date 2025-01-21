@@ -37,6 +37,7 @@ const getCommodity = async () => {
     commodityList.value = result.data;
     nextTick(() => {
       setTimeout(() => {
+        calDOMHeight();
         calWaterfall(commodityListRef.value[activeTab.value]);
       }, 200);
     });
@@ -53,6 +54,23 @@ const showCommodityInfo = (id) => {
 // 跳转优惠券页面
 const showVouchersPage = () => {
   router.push("/vouchers");
+};
+
+const calDOMHeight = () => {
+  let bodyHeight = document.documentElement.clientHeight;
+  let searchbarHeight =
+    document.getElementsByClassName("nut-searchbar")[0].offsetHeight;
+  let tabsTitleHeight =
+    document.getElementsByClassName("nut-sticky__box")[0].offsetHeight;
+  let tabbarHeight =
+    document.getElementsByClassName("nut-tabbar")[0].offsetHeight;
+  let tabsPaneHeight =
+    bodyHeight - (searchbarHeight + tabsTitleHeight + tabbarHeight);
+  let tabsPane = document.getElementsByClassName("nut-tab-pane");
+
+  for (let i = 0; i < tabsPane.length; i++) {
+    tabsPane[i].style = `height:` + tabsPaneHeight + `px`;
+  }
 };
 </script>
 

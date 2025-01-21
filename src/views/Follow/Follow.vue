@@ -27,15 +27,19 @@ const mutualFollowings = ref([]);
 const getData = async () => {
   if (activeTab.value === "1") {
     const result = await getMutualFollowingService(route.query.id);
-    console.log(result.data);
-
     if (result.code === 0) {
       mutualFollowings.value = result.data;
+      // mutualFollowings.value = mutualFollowings.value.concat(result.data);
+      // mutualFollowings.value = mutualFollowings.value.concat(result.data);
+      // mutualFollowings.value = mutualFollowings.value.concat(result.data);
     }
   } else if (activeTab.value === "2") {
     const result = await getFolloweeService(route.query.id);
     if (result.code === 0) {
       followee.value = result.data;
+      // followee.value = followee.value.concat(result.data);
+      // followee.value = followee.value.concat(result.data);
+      // followee.value = followee.value.concat(result.data);
     }
   } else {
     const result = await getFansService(route.query.id);
@@ -77,6 +81,21 @@ const followUser = async (followUserId, isFollowedParam) => {
     }
   }
 };
+
+const calDOMHeight = () => {
+  let bodyHeight = document.documentElement.clientHeight;
+  let tabsTitleHeight =
+    document.getElementsByClassName("nut-sticky__box")[0].offsetHeight;
+  let tabsPaneHeight = bodyHeight - tabsTitleHeight;
+  let tabsPane = document.getElementsByClassName("nut-tab-pane");
+
+  for (let i = 0; i < tabsPane.length; i++) {
+    tabsPane[i].style = `height:` + tabsPaneHeight + `px`;
+  }
+};
+nextTick(() => {
+  calDOMHeight();
+});
 </script>
 
 <template>
@@ -300,6 +319,7 @@ const followUser = async (followUserId, isFollowedParam) => {
   display: flex;
   flex-direction: column;
   font-size: 1.5rem;
+  overflow: scroll;
 }
 .list .list-content {
   display: flex;
@@ -334,20 +354,18 @@ const followUser = async (followUserId, isFollowedParam) => {
   color: var(--theme-color-grey-text);
 }
 
-
-
 .blogs-container {
-    width: 100%;
-    /* background-color: var(--grey-bg); */
-    -moz-column-count: 2;
-    /* Firefox */
-    -webkit-column-count: 2;
-    /* Safari 和 Chrome */
-    column-count: 2;
-    column-width: 45%;
-    -webkit-column-gap: 0.5rem;
-    column-gap: 0.5rem;
-    padding-top: 0.3rem;
-    box-sizing: border-box;
+  width: 100%;
+  /* background-color: var(--grey-bg); */
+  -moz-column-count: 2;
+  /* Firefox */
+  -webkit-column-count: 2;
+  /* Safari 和 Chrome */
+  column-count: 2;
+  column-width: 45%;
+  -webkit-column-gap: 0.5rem;
+  column-gap: 0.5rem;
+  padding-top: 0.3rem;
+  box-sizing: border-box;
 }
 </style>

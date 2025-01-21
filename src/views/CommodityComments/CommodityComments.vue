@@ -56,62 +56,72 @@ const showUserInfo = (id) => {
 </script>
 
 <template>
-  <div class="header">
-    <div class="data">
-      <div>评论数</div>
-      <div v-if="comments.length !== 0" class="data-num">
-        {{ comments.length }}
+  <div class="main-container">
+    <div class="header">
+      <div class="data">
+        <div>评论数</div>
+        <div v-if="comments.length !== 0" class="data-num">
+          {{ comments.length }}
+        </div>
+        <div v-if="comments.length === 0" class="data-num">0</div>
       </div>
-      <div v-if="comments.length === 0" class="data-num">0</div>
-    </div>
-    <div class="data">
-      <div>综合评分</div>
-      <nut-rate v-model="score" readonly size="1.3rem" spacing="5" allow-half />
-      <div v-if="comments.length !== 0" class="data-num score">{{ score }}</div>
-      <div v-if="comments.length === 0" class="data-num-0">暂无评分</div>
-    </div>
-    <div class="statistic">
-      <div class="content" v-for="item in starRate" :key="item.star">
-        <nut-rate v-model="item.star" readonly size="1.3rem" spacing="5" />
-        <nut-progress
-          :percentage="(item.num / comments.length).toFixed(2) * 100"
-          :show-text="false"
-          v-if="comments.length !== 0"
+      <div class="data">
+        <div>综合评分</div>
+        <nut-rate
+          v-model="score"
+          readonly
+          size="1.3rem"
+          spacing="5"
+          allow-half
         />
-        <nut-progress
-          :percentage="0"
-          :show-text="false"
-          v-if="comments.length === 0"
-        />
+        <div v-if="comments.length !== 0" class="data-num score">
+          {{ score }}
+        </div>
+        <div v-if="comments.length === 0" class="data-num-0">暂无评分</div>
       </div>
-    </div>
-  </div>
-  <div class="comment-info" @click="showComments">
-    <nut-empty
-      description="这里还没有评论，你来试着发一条吧"
-      v-if="comments.length === 0"
-    ></nut-empty>
-    <div class="comment-container" v-for="item in comments" :key="item.id">
-      <div class="customer" @click="showUserInfo(item.userId)">
-        <img
-          class="avatar"
-          src="../../../public/images/icon/default-avatar.png"
-          alt=""
-          v-if="item.profilePicture === null || item.profilePicture === ''"
-        />
-        <img
-          class="avatar"
-          :src="item.profilePicture"
-          alt=""
-          v-if="item.profilePicture !== null && item.profilePicture !== ''"
-        />
-        <div class="username-date">
-          <div>{{ item.username }}</div>
-          <div>{{ item.createTime }}</div>
+      <div class="statistic">
+        <div class="content" v-for="item in starRate" :key="item.star">
+          <nut-rate v-model="item.star" readonly size="1.3rem" spacing="5" />
+          <nut-progress
+            :percentage="(item.num / comments.length).toFixed(2) * 100"
+            :show-text="false"
+            v-if="comments.length !== 0"
+          />
+          <nut-progress
+            :percentage="0"
+            :show-text="false"
+            v-if="comments.length === 0"
+          />
         </div>
       </div>
-      <nut-rate v-model="item.score" readonly size="1.3rem" spacing="5" />
-      <div class="content">{{ item.content }}</div>
+    </div>
+    <div class="comment-info" @click="showComments">
+      <nut-empty
+        description="这里还没有评论，你来试着发一条吧"
+        v-if="comments.length === 0"
+      ></nut-empty>
+      <div class="comment-container" v-for="item in comments" :key="item.id">
+        <div class="customer" @click="showUserInfo(item.userId)">
+          <img
+            class="avatar"
+            src="../../../public/images/icon/default-avatar.png"
+            alt=""
+            v-if="item.profilePicture === null || item.profilePicture === ''"
+          />
+          <img
+            class="avatar"
+            :src="item.profilePicture"
+            alt=""
+            v-if="item.profilePicture !== null && item.profilePicture !== ''"
+          />
+          <div class="username-date">
+            <div>{{ item.username }}</div>
+            <div>{{ item.createTime }}</div>
+          </div>
+        </div>
+        <nut-rate v-model="item.score" readonly size="1.3rem" spacing="5" />
+        <div class="content">{{ item.content }}</div>
+      </div>
     </div>
   </div>
 </template>

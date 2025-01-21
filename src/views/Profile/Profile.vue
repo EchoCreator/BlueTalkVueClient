@@ -28,6 +28,9 @@ const getUserInfo = async () => {
     getUsersCommodity();
     getUsersBlogs();
     getUsersLikedFavoriteBlogs();
+    nextTick(() => {
+      calDOMHeight();
+    });
   }
 };
 getUserInfo();
@@ -44,6 +47,7 @@ const getUsersCommodity = async () => {
       commodityList.value = result.data;
       nextTick(() => {
         setTimeout(() => {
+          calDOMHeight();
           calWaterfall(commodityListRef.value);
         }, 200);
       });
@@ -148,6 +152,25 @@ const showCommodityInfo = (id) => {
 // 跳转关注和粉丝界面
 const showFollow = (id, type) => {
   router.push({ path: "/follow", query: { id: id, type: type } });
+};
+
+const calDOMHeight = () => {
+  let bodyHeight = document.documentElement.clientHeight;
+  let headerHeight =
+    document.getElementsByClassName("profile-content")[0].offsetTop +
+    document.getElementsByClassName("nut-tabs__titles")[0].offsetTop;
+  let tabsTitleHeight =
+    document.getElementsByClassName("nut-tabs__titles")[0].offsetHeight;
+
+  let tabbarHeight =
+    document.getElementsByClassName("nut-tabbar")[0].offsetHeight;
+  let tabsPaneHeight =
+    bodyHeight - (headerHeight + tabsTitleHeight + tabbarHeight);
+  let tabsPane = document.getElementsByClassName("nut-tab-pane");
+
+  for (let i = 0; i < tabsPane.length; i++) {
+    tabsPane[i].style = `height:` + tabsPaneHeight + `px`;
+  }
 };
 </script>
 
@@ -488,4 +511,10 @@ const showFollow = (id, type) => {
   position: relative;
   top: -3rem;
 }
+
+/* .nut-tab-pane {
+  padding: 0 !important;
+  height: 60vh !important;
+  overflow-y: scroll !important;
+} */
 </style>

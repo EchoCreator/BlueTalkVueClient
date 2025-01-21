@@ -53,117 +53,122 @@ const showUserInfo = (id) => {
 </script>
 
 <template>
-  <nut-swiper :loop="false" height="auto">
-    <nut-swiper-item
-      v-for="(item, index) in commodityInfo.commodity.images.split(',')"
-      :key="index"
-    >
-      <img
-        :src="item"
-        alt=""
-        style="width: 100%; height: 100%"
-        draggable="false"
-      />
-    </nut-swiper-item>
-  </nut-swiper>
-  <div class="info-container">
-    <div class="commodity-info">
-      <div class="price-sold">
-        <div class="price">￥{{ commodityInfo.commodity.price }}</div>
-        <div class="sold">{{ commodityInfo.commodity.sold }}+人已买</div>
-      </div>
-      <div class="name">{{ commodityInfo.commodity.name }}</div>
-    </div>
-    <div class="user-info" @click="showUserInfo(commodityInfo.user.id)">
-      <div class="main-info">
-        <img
-          class="avatar"
-          src="../../../public/images/icon/default-avatar.png"
-          alt=""
-          v-if="
-            commodityInfo.user.profilePicture === null ||
-            commodityInfo.user.profilePicture === ''
-          "
-        />
-        <img
-          class="avatar"
-          :src="commodityInfo.user.profilePicture"
-          alt=""
-          v-if="
-            commodityInfo.user.profilePicture !== null &&
-            commodityInfo.user.profilePicture !== ''
-          "
-        />
-        <div class="username">{{ commodityInfo.user.username }}</div>
-        <div class="fans">粉丝{{ commodityInfo.user.fans }}</div>
-      </div>
-      <div class="navigate">进店<RectRight /></div>
-    </div>
-    <div class="delivery-info">
-      <div class="delivery-container">
-        <div class="left">保障</div>
-        <div class="right guarantee">
-          <div>
-            <img src="../../../public/images/icon/right.png" alt="" />退货包运费
-          </div>
-          <div>
-            <img src="../../../public/images/icon/right.png" alt="" />极速退款
-          </div>
-          <div>
-            <img src="../../../public/images/icon/right.png" alt="" />晚发必赔
-          </div>
-        </div>
-      </div>
-      <div class="delivery-container">
-        <div class="left">发货</div>
-        <div class="right">
-          <div class="delivery-time">
-            {{ commodityInfo.commodity.deliveryTime }}小时内发货
-          </div>
-          <div class="address">
-            {{ commodityInfo.commodity.address }} | 包邮
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="comment-info" @click="showComments">
-      <div class="header">
-        <div>商品评价 {{ commodityInfo.commodityCommentsList.length }}</div>
-        <div
-          class="score"
-          v-if="commodityInfo.commodityCommentsList.length !== 0"
-        >
-          评分 {{ score }}
-        </div>
-        <div
-          class="score"
-          v-if="commodityInfo.commodityCommentsList.length === 0"
-        >
-          暂无评分
-        </div>
-      </div>
-      <div
-        class="comment-container"
-        v-for="item in commodityInfo.commodityCommentsList.slice(0, 2)"
-        :key="item.id"
+  <div class="main-container">
+    <nut-swiper :loop="false" height="auto">
+      <nut-swiper-item
+        v-for="(item, index) in commodityInfo.commodity.images.split(',')"
+        :key="index"
       >
-        <div class="customer">
+        <img
+          :src="item"
+          alt=""
+          style="width: 100%; height: 100%"
+          draggable="false"
+        />
+      </nut-swiper-item>
+    </nut-swiper>
+    <div class="info-container">
+      <div class="commodity-info">
+        <div class="price-sold">
+          <div class="price">￥{{ commodityInfo.commodity.price }}</div>
+          <div class="sold">{{ commodityInfo.commodity.sold }}+人已买</div>
+        </div>
+        <div class="name">{{ commodityInfo.commodity.name }}</div>
+      </div>
+      <div class="user-info" @click="showUserInfo(commodityInfo.user.id)">
+        <div class="main-info">
           <img
             class="avatar"
             src="../../../public/images/icon/default-avatar.png"
             alt=""
-            v-if="item.profilePicture === null || item.profilePicture === ''"
+            v-if="
+              commodityInfo.user.profilePicture === null ||
+              commodityInfo.user.profilePicture === ''
+            "
           />
           <img
             class="avatar"
-            :src="item.profilePicture"
+            :src="commodityInfo.user.profilePicture"
             alt=""
-            v-if="item.profilePicture !== null && item.profilePicture !== ''"
+            v-if="
+              commodityInfo.user.profilePicture !== null &&
+              commodityInfo.user.profilePicture !== ''
+            "
           />
-          <div class="username">{{ item.username }}</div>
+          <div class="username">{{ commodityInfo.user.username }}</div>
+          <div class="fans">粉丝{{ commodityInfo.user.fans }}</div>
         </div>
-        <nut-rate v-model="item.score" readonly size="1.3rem" spacing="5" />
-        <div class="content">{{ item.content }}</div>
+        <div class="navigate">进店<RectRight /></div>
+      </div>
+      <div class="delivery-info">
+        <div class="delivery-container">
+          <div class="left">保障</div>
+          <div class="right guarantee">
+            <div>
+              <img
+                src="../../../public/images/icon/right.png"
+                alt=""
+              />退货包运费
+            </div>
+            <div>
+              <img src="../../../public/images/icon/right.png" alt="" />极速退款
+            </div>
+            <div>
+              <img src="../../../public/images/icon/right.png" alt="" />晚发必赔
+            </div>
+          </div>
+        </div>
+        <div class="delivery-container">
+          <div class="left">发货</div>
+          <div class="right">
+            <div class="delivery-time">
+              {{ commodityInfo.commodity.deliveryTime }}小时内发货
+            </div>
+            <div class="address">
+              {{ commodityInfo.commodity.address }} | 包邮
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="comment-info" @click="showComments">
+        <div class="header">
+          <div>商品评价 {{ commodityInfo.commodityCommentsList.length }}</div>
+          <div
+            class="score"
+            v-if="commodityInfo.commodityCommentsList.length !== 0"
+          >
+            评分 {{ score }}
+          </div>
+          <div
+            class="score"
+            v-if="commodityInfo.commodityCommentsList.length === 0"
+          >
+            暂无评分
+          </div>
+        </div>
+        <div
+          class="comment-container"
+          v-for="item in commodityInfo.commodityCommentsList.slice(0, 2)"
+          :key="item.id"
+        >
+          <div class="customer">
+            <img
+              class="avatar"
+              src="../../../public/images/icon/default-avatar.png"
+              alt=""
+              v-if="item.profilePicture === null || item.profilePicture === ''"
+            />
+            <img
+              class="avatar"
+              :src="item.profilePicture"
+              alt=""
+              v-if="item.profilePicture !== null && item.profilePicture !== ''"
+            />
+            <div class="username">{{ item.username }}</div>
+          </div>
+          <nut-rate v-model="item.score" readonly size="1.3rem" spacing="5" />
+          <div class="content">{{ item.content }}</div>
+        </div>
       </div>
     </div>
   </div>

@@ -15,6 +15,7 @@
     --dark-grey-bg: #707070;
     --tag-color: #4e5da0;
     --nut-infiniteloading-bottom-color: var(--theme-color-grey-text);
+    --nut-tabbar-height: 5rem;
 }
 
 
@@ -25,6 +26,17 @@
 
 html {
     font-size: 62.5%;
+}
+
+html,
+body {
+    overflow: hidden;
+}
+
+.main-container {
+    width: 100%;
+    height: 100vh;
+    overflow: scroll;
 }
 
 .login-form .nut-form .nut-input,
@@ -64,6 +76,9 @@ html {
 
 .nut-tab-pane {
     padding: 0 !important;
+    overflow-y: scroll !important;
+    padding-bottom: 0rem !important;
+    box-sizing: border-box;
 }
 
 /* textarea */
@@ -100,6 +115,7 @@ html {
     margin: 0.3rem 0; */
     border-radius: 0.5rem;
     overflow: hidden;
+    top: -100vh;
 }
 
 .blog .blog-image {
@@ -136,7 +152,7 @@ html {
 }
 
 .blog .name {
-    width: 10rem;
+    max-width: 7rem;
     font-size: 1.4rem;
     overflow: hidden;
     text-overflow: ellipsis;

@@ -153,246 +153,250 @@ const followUser = async (followUserId, isFollowedParam) => {
 </script>
 
 <template>
-  <div class="writer-info">
-    <div class="avatar-name" @click="showUserInfo(blogContent.blog.userId)">
-      <img
-        class="avatar"
-        src="../../../public/images/icon/default-avatar.png"
-        alt=""
-        v-if="
-          blogContent.blog.profilePicture === null ||
-          blogContent.blog.profilePicture === ''
-        "
-      />
-      <img
-        class="avatar"
-        :src="blogContent.blog.profilePicture"
-        alt=""
-        v-if="
-          blogContent.blog.profilePicture !== null &&
-          blogContent.blog.profilePicture !== ''
-        "
-      />
-      <div class="name">
-        {{ blogContent.blog.username }}
-      </div>
-    </div>
-    <div
-      class="follow-button"
-      v-if="
-        blogContent.blog.userId != userInfoStore.userInfo.id && isFollowed === 0
-      "
-      @click="followUser(blogContent.blog.userId, 0)"
-    >
-      关注
-    </div>
-    <div
-      class="follow-button is-followed"
-      v-if="
-        blogContent.blog.userId != userInfoStore.userInfo.id && isFollowed === 1
-      "
-      @click="followUser(blogContent.blog.userId, 1)"
-    >
-      已关注
-    </div>
-  </div>
-  <div class="blog-page">
-    <nut-swiper :loop="false" height="auto" @change="changeSwiper">
-      <nut-swiper-item
-        v-for="(item, index) in blogContent.blog.images.split(',')"
-        :key="index"
-      >
-        <img
-          :src="item"
-          alt=""
-          style="width: 100%; height: 100%"
-          draggable="false"
-        />
-      </nut-swiper-item>
-      <template #page>
-        <div class="swiper-pagination">
-          {{ swiperIndex }}/{{ blogContent.blog.images.split(",").length }}
-        </div>
-      </template>
-    </nut-swiper>
-    <div class="blog-content">
-      <div class="title">{{ blogContent.blog.title }}</div>
-      <div class="content">{{ blogContent.blog.content }}</div>
-      <div class="tags" v-if="blogContent.blog.tags !== null">
-        <div
-          class="tag"
-          v-for="(item, index) in blogContent.blog.tags.split(',')"
-          :key="index"
-        >
-          #{{ item }}
-        </div>
-      </div>
-      <div class="address" v-if="blogContent.blog.address !== null">
-        <Location2 />
-        <div>{{ blogContent.blog.address }}</div>
-      </div>
-      <div class="time">{{ blogContent.blog.createTime }}</div>
-      <div class="underline"></div>
-    </div>
-  </div>
-  <div class="comments">
-    <div class="num">共 {{ blogContent.blog.comments }} 条评论</div>
-    <div
-      class="comment-card"
-      v-for="item in blogContent.comments"
-      :key="item.id"
-    >
-      <div class="comment-content">
+  <div class="main-container">
+    <div class="writer-info">
+      <div class="avatar-name" @click="showUserInfo(blogContent.blog.userId)">
         <img
           class="avatar"
           src="../../../public/images/icon/default-avatar.png"
           alt=""
-          v-if="item.profilePicture === null || item.profilePicture === ''"
-          @click="showUserInfo(item.userId)"
+          v-if="
+            blogContent.blog.profilePicture === null ||
+            blogContent.blog.profilePicture === ''
+          "
         />
         <img
           class="avatar"
-          :src="item.profilePicture"
+          :src="blogContent.blog.profilePicture"
           alt=""
-          v-if="item.profilePicture !== null && item.profilePicture !== ''"
-          @click="showUserInfo(item.userId)"
+          v-if="
+            blogContent.blog.profilePicture !== null &&
+            blogContent.blog.profilePicture !== ''
+          "
         />
-        <div class="name-content">
-          <div class="name" @click="showUserInfo(item.userId)">
-            {{ item.username }}
-            <span
-              class="writer-label"
-              v-if="blogContent.blog.userId === item.userId"
-              >作者</span
-            >
-            <span
-              class="me-label"
-              v-if="userInfoStore.userInfo.id === item.userId"
-              >我</span
-            >
+        <div class="name">
+          {{ blogContent.blog.username }}
+        </div>
+      </div>
+      <div
+        class="follow-button"
+        v-if="
+          blogContent.blog.userId != userInfoStore.userInfo.id &&
+          isFollowed === 0
+        "
+        @click="followUser(blogContent.blog.userId, 0)"
+      >
+        关注
+      </div>
+      <div
+        class="follow-button is-followed"
+        v-if="
+          blogContent.blog.userId != userInfoStore.userInfo.id &&
+          isFollowed === 1
+        "
+        @click="followUser(blogContent.blog.userId, 1)"
+      >
+        已关注
+      </div>
+    </div>
+    <div class="blog-page">
+      <nut-swiper :loop="false" height="auto" @change="changeSwiper">
+        <nut-swiper-item
+          v-for="(item, index) in blogContent.blog.images.split(',')"
+          :key="index"
+        >
+          <img
+            :src="item"
+            alt=""
+            style="width: 100%; height: 100%"
+            draggable="false"
+          />
+        </nut-swiper-item>
+        <template #page>
+          <div class="swiper-pagination">
+            {{ swiperIndex }}/{{ blogContent.blog.images.split(",").length }}
           </div>
+        </template>
+      </nut-swiper>
+      <div class="blog-content">
+        <div class="title">{{ blogContent.blog.title }}</div>
+        <div class="content">{{ blogContent.blog.content }}</div>
+        <div class="tags" v-if="blogContent.blog.tags !== null">
           <div
-            class="content"
-            @click="showSheet(item.id, 0, item.userId, item.username)"
+            class="tag"
+            v-for="(item, index) in blogContent.blog.tags.split(',')"
+            :key="index"
           >
-            {{ item.content }}
+            #{{ item }}
           </div>
-          <div class="time">{{ item.createTime.slice(0, 16) }}</div>
-          <div
-            class="reply-comments"
-            v-for="citem in item.childrenComments"
-            :key="citem.id"
-          >
-            <div class="comment-content reply-comment-content">
-              <img
-                class="avatar"
-                src="../../../public/images/icon/default-avatar.png"
-                alt=""
-                v-if="
-                  citem.profilePicture === null || citem.profilePicture === ''
-                "
-                @click="showUserInfo(citem.userId)"
-              />
-              <img
-                class="avatar"
-                :src="citem.profilePicture"
-                alt=""
-                v-if="
-                  citem.profilePicture !== null && citem.profilePicture !== ''
-                "
-                @click="showUserInfo(citem.userId)"
-              />
-              <div class="name-content">
-                <div class="name" @click="showUserInfo(citem.userId)">
-                  {{ citem.username }}
-                  <span
-                    class="writer-label"
-                    v-if="blogContent.blog.userId === citem.userId"
-                    >作者</span
-                  >
-                  <span
-                    class="me-label"
-                    v-if="userInfoStore.userInfo.id === citem.userId"
-                    >我</span
-                  >
-                </div>
-                <div
-                  class="content"
-                  @click="
-                    showSheet(item.id, citem.id, citem.userId, citem.username)
+        </div>
+        <div class="address" v-if="blogContent.blog.address !== null">
+          <Location2 />
+          <div>{{ blogContent.blog.address }}</div>
+        </div>
+        <div class="time">{{ blogContent.blog.createTime }}</div>
+        <div class="underline"></div>
+      </div>
+    </div>
+    <div class="comments">
+      <div class="num">共 {{ blogContent.blog.comments }} 条评论</div>
+      <div
+        class="comment-card"
+        v-for="item in blogContent.comments"
+        :key="item.id"
+      >
+        <div class="comment-content">
+          <img
+            class="avatar"
+            src="../../../public/images/icon/default-avatar.png"
+            alt=""
+            v-if="item.profilePicture === null || item.profilePicture === ''"
+            @click="showUserInfo(item.userId)"
+          />
+          <img
+            class="avatar"
+            :src="item.profilePicture"
+            alt=""
+            v-if="item.profilePicture !== null && item.profilePicture !== ''"
+            @click="showUserInfo(item.userId)"
+          />
+          <div class="name-content">
+            <div class="name" @click="showUserInfo(item.userId)">
+              {{ item.username }}
+              <span
+                class="writer-label"
+                v-if="blogContent.blog.userId === item.userId"
+                >作者</span
+              >
+              <span
+                class="me-label"
+                v-if="userInfoStore.userInfo.id === item.userId"
+                >我</span
+              >
+            </div>
+            <div
+              class="content"
+              @click="showSheet(item.id, 0, item.userId, item.username)"
+            >
+              {{ item.content }}
+            </div>
+            <div class="time">{{ item.createTime.slice(0, 16) }}</div>
+            <div
+              class="reply-comments"
+              v-for="citem in item.childrenComments"
+              :key="citem.id"
+            >
+              <div class="comment-content reply-comment-content">
+                <img
+                  class="avatar"
+                  src="../../../public/images/icon/default-avatar.png"
+                  alt=""
+                  v-if="
+                    citem.profilePicture === null || citem.profilePicture === ''
                   "
-                >
-                  <span v-if="citem.replyUsername !== null"
-                    >回复<span
-                      class="reply-username"
-                      @click.stop="showUserInfo(citem.replyUserId)"
-                      >{{ citem.replyUsername }}</span
-                    >:</span
-                  >{{ citem.content }}
+                  @click="showUserInfo(citem.userId)"
+                />
+                <img
+                  class="avatar"
+                  :src="citem.profilePicture"
+                  alt=""
+                  v-if="
+                    citem.profilePicture !== null && citem.profilePicture !== ''
+                  "
+                  @click="showUserInfo(citem.userId)"
+                />
+                <div class="name-content">
+                  <div class="name" @click="showUserInfo(citem.userId)">
+                    {{ citem.username }}
+                    <span
+                      class="writer-label"
+                      v-if="blogContent.blog.userId === citem.userId"
+                      >作者</span
+                    >
+                    <span
+                      class="me-label"
+                      v-if="userInfoStore.userInfo.id === citem.userId"
+                      >我</span
+                    >
+                  </div>
+                  <div
+                    class="content"
+                    @click="
+                      showSheet(item.id, citem.id, citem.userId, citem.username)
+                    "
+                  >
+                    <span v-if="citem.replyUsername !== null"
+                      >回复<span
+                        class="reply-username"
+                        @click.stop="showUserInfo(citem.replyUserId)"
+                        >{{ citem.replyUsername }}</span
+                      >:</span
+                    >{{ citem.content }}
+                  </div>
+                  <div class="time">{{ citem.createTime.slice(0, 16) }}</div>
                 </div>
-                <div class="time">{{ citem.createTime.slice(0, 16) }}</div>
-              </div>
-              <div class="likes">
-                <HeartFill2 />
-                <div>{{ citem.likes }}</div>
+                <div class="likes">
+                  <HeartFill2 />
+                  <div>{{ citem.likes }}</div>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="likes">
+          <HeartFill2 />
+          <div>{{ item.likes }}</div>
+        </div>
       </div>
-      <div class="likes">
-        <HeartFill2 />
-        <div>{{ item.likes }}</div>
+    </div>
+    <div class="bottom">
+      <div
+        class="input-button interaction-button"
+        @click="showSheet(0, 0, 0, null)"
+      >
+        <Edit />
+        <div class="placeholder">友善是美好的开始</div>
       </div>
-    </div>
-  </div>
-  <div class="bottom">
-    <div
-      class="input-button interaction-button"
-      @click="showSheet(0, 0, 0, null)"
-    >
-      <Edit />
-      <div class="placeholder">友善是美好的开始</div>
-    </div>
-    <div class="interaction-button" @click="likeBlog">
-      <HeartFill2 v-if="blogContent.blog.isLiked === 0" />
-      <HeartFill1
-        color="var(--theme-color-red)"
-        v-if="blogContent.blog.isLiked === 1"
-      />
-      <div>{{ blogContent.blog.likes }}</div>
-    </div>
-    <div class="interaction-button" @click="favoriteBlog">
-      <Star v-if="blogContent.blog.isFavorite === 0" />
-      <StarFillN
-        color="var(--theme-color-yellow)"
-        v-if="blogContent.blog.isFavorite === 1"
-      />
-      <div>{{ blogContent.blog.favorites }}</div>
-    </div>
-    <div class="interaction-button">
-      <Message />
-      <div>{{ blogContent.blog.comments }}</div>
-    </div>
-  </div>
-  <div class="input-action-sheet">
-    <nut-action-sheet v-model:visible="sheetVisible">
-      <div class="sheet-content">
-        <nut-textarea
-          v-model="commentInput"
-          :rows="3"
-          autosize
-          :placeholder="placeholder"
-          autofocus
+      <div class="interaction-button" @click="likeBlog">
+        <HeartFill2 v-if="blogContent.blog.isLiked === 0" />
+        <HeartFill1
+          color="var(--theme-color-red)"
+          v-if="blogContent.blog.isLiked === 1"
         />
-        <nut-button
-          color="var(--theme-color)"
-          :disabled="commentInput === ''"
-          @click="postBlogComment"
-          >发送</nut-button
-        >
+        <div>{{ blogContent.blog.likes }}</div>
       </div>
-    </nut-action-sheet>
+      <div class="interaction-button" @click="favoriteBlog">
+        <Star v-if="blogContent.blog.isFavorite === 0" />
+        <StarFillN
+          color="var(--theme-color-yellow)"
+          v-if="blogContent.blog.isFavorite === 1"
+        />
+        <div>{{ blogContent.blog.favorites }}</div>
+      </div>
+      <div class="interaction-button">
+        <Message />
+        <div>{{ blogContent.blog.comments }}</div>
+      </div>
+    </div>
+    <div class="input-action-sheet">
+      <nut-action-sheet v-model:visible="sheetVisible">
+        <div class="sheet-content">
+          <nut-textarea
+            v-model="commentInput"
+            :rows="3"
+            autosize
+            :placeholder="placeholder"
+            autofocus
+          />
+          <nut-button
+            color="var(--theme-color)"
+            :disabled="commentInput === ''"
+            @click="postBlogComment"
+            >发送</nut-button
+          >
+        </div>
+      </nut-action-sheet>
+    </div>
   </div>
 </template>
 
@@ -618,7 +622,7 @@ const followUser = async (followUserId, isFollowedParam) => {
   margin-top: 1rem;
 }
 
-.input-action-sheet ::v-deep(.nut-popup){
+.input-action-sheet ::v-deep(.nut-popup) {
   border-radius: 0 !important;
 }
 </style>

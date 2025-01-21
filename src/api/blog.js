@@ -37,3 +37,7 @@ export const getFolloweeBlogsService = (minTime, offset) => {
     "/user/blog/getFolloweeBlogs?minTime=" + minTime + "&offset=" + offset
   );
 };
+
+export const getNearbyBlogsService = (page) => {
+  return request.get("/user/blog/getNearbyBlogs?page=" + page);
+};

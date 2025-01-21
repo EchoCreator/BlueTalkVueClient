@@ -31,6 +31,9 @@ const getUserInfo = async () => {
     getUsersBlogs();
     getUsersLikedFavoriteBlogs();
     isFollowedFunction(route.query.id);
+    nextTick(() => {
+      calDOMHeight();
+    });
   }
 };
 getUserInfo();
@@ -47,6 +50,9 @@ const getUsersCommodity = async () => {
       commodityList.value = result.data;
       nextTick(() => {
         setTimeout(() => {
+          nextTick(() => {
+            calDOMHeight();
+          });
           calWaterfall(commodityListRef.value);
         }, 200);
       });
@@ -191,6 +197,21 @@ const followUser = async (followUserId, isFollowedParam) => {
         size: "small",
       });
     }
+  }
+};
+
+const calDOMHeight = () => {
+  let bodyHeight = document.documentElement.clientHeight;
+  let headerHeight =
+    document.getElementsByClassName("profile-content")[0].offsetTop +
+    document.getElementsByClassName("nut-tabs__titles")[0].offsetTop;
+  let tabsTitleHeight =
+    document.getElementsByClassName("nut-tabs__titles")[0].offsetHeight;
+  let tabsPaneHeight = bodyHeight - (headerHeight + tabsTitleHeight);
+  let tabsPane = document.getElementsByClassName("nut-tab-pane");
+
+  for (let i = 0; i < tabsPane.length; i++) {
+    tabsPane[i].style = `height:` + tabsPaneHeight + `px`;
   }
 };
 </script>
