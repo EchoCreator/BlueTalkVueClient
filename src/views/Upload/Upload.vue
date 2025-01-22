@@ -12,6 +12,8 @@ import { postBlogService } from "@/api/blog";
 const fileList = ref([]);
 const successUpload = (result) => {
   const file = JSON.parse(result.responseText).data;
+  console.log(file);
+  
   fileList.value.push(file);
 };
 const deleteFile = (val) => {

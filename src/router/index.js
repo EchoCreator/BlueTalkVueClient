@@ -32,6 +32,11 @@ export const router = createRouter({
       ],
     },
     {
+      path: "/chat",
+      name: "chat",
+      component: () => import("../views/Message/ChatContent/ChatContent.vue"),
+    },
+    {
       path: "/upload",
       name: "upload",
       component: () => import("../views/Upload/Upload.vue"),
