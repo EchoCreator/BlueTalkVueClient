@@ -68,7 +68,7 @@ const login = async () => {
   const result = await loginService(formData.value);
   if (result.code === 0) {    
     tokenStore.setToken(result.data.token);
-    router.push("/");
+    router.push("/profile");
   } else {
     showToast.text(result.message, {
       size: "small",

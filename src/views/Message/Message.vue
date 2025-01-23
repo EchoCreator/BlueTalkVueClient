@@ -14,6 +14,7 @@ const getChatList = async () => {
       const now = new Date();
       // 由于只有年月日，所以chatDate的时分秒为0
       const chatDate = new Date(dateStr);
+      const chatDateTime = new Date(value.createTime);
       // 将当前时间的时分秒设置为0，方便与chatDate比较
       const todayDate = new Date(
         now.getFullYear(),
@@ -24,7 +25,7 @@ const getChatList = async () => {
       // 如果是今天
       if (chatDate.getTime() === todayDate.getTime()) {
         // 计算消息时间和当前时间的毫秒差
-        const timeDifference = Math.abs(now - chatDate);
+        const timeDifference = Math.abs(now - chatDateTime);
         // 如果是最近1分钟，返回“刚刚”；否则返回“时:分”
         if (timeDifference < 60 * 1000) {
           return (value.createTime = "刚刚");
