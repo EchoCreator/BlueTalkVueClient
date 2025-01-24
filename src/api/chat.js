@@ -9,3 +9,7 @@ export const getChatContentService = (id, isSingleChat) => {
     "/user/chat/getChatContent?id=" + id + "&isSingleChat=" + isSingleChat
   );
 };
+
+export const sendMessageService = (chat) => {
+  return request.put("/user/chat/sendMessage", chat);
+};

@@ -1,5 +1,5 @@
 <script setup>
-import { nextTick, ref } from "vue";
+import { nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useUserInfoStore } from "@/stores/userInfo";
 import { RectLeft, Edit } from "@nutui/icons-vue";
@@ -8,13 +8,14 @@ const route = useRoute();
 const router = useRouter();
 const userInfoStore = useUserInfoStore();
 
-import { getChatContentService } from "@/api/chat";
+import { getChatContentService, sendMessageService } from "@/api/chat";
 
 const chat = ref({
   chatInfo: {},
-  chatContent: {},
+  chatContent: [],
   isSingleChat: 1,
 });
+const lastCreateTime = ref(null);
 const getChatContent = async () => {
   const result = await getChatContentService(
     route.query.id,
@@ -22,50 +23,49 @@ const getChatContent = async () => {
   );
   if (result.code === 0) {
     chat.value = result.data;
-    let lastCreateTime = null;
     chat.value.chatContent = chat.value.chatContent.filter((val) => {
-      const chatDateTime = new Date(val.createTime);
-      const chatDate = new Date(val.createTime.split(" ")[0]);
-      const now = new Date();
-      const todayDate = new Date(
-        now.getFullYear(),
-        now.getMonth(),
-        now.getDate()
-      );
-
-      // 如果与上一条消息间隔不超过2分钟
-      if (lastCreateTime !== null) {
-        const lastTimeDifference = Math.abs(chatDateTime - lastCreateTime);
-        lastCreateTime = chatDateTime;
-        if (lastTimeDifference < 2 * 60 * 1000) {
-          return (val.createTime = "hidden");
-        }
-      }
-
-      lastCreateTime = chatDateTime;
-
-      // 如果是今天
-      if (chatDate.getTime() === todayDate.getTime()) {
-        // 如果是1分钟内
-        const timeDifference = Math.abs(now - chatDateTime);
-        if (timeDifference < 60 * 1000) {
-          return (val.createTime = "刚刚");
-        }
-        return (val.createTime = val.createTime.slice(11, 16));
-      }
-
-      return (val.createTime = val.createTime.slice(0, 16));
+      const time = calTime(val.createTime);
+      return (val.createTime = time);
     });
-    console.log(chat.value);
-    console.log(userInfoStore.userInfo);
-    
 
     nextTick(() => {
       calDOM();
+      scrollBottom();
     });
   }
 };
 getChatContent();
+
+const calTime = (time) => {
+  time = time.replace(/T/, " ").replace(/-/g, "/");
+  const chatDateTime = new Date(time);
+  const chatDate = new Date(time.split(" ")[0]);
+  const now = new Date();
+  const todayDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+  // 如果与上一条消息间隔不超过2分钟
+  if (lastCreateTime.value !== null) {
+    const lastTimeDifference = Math.abs(chatDateTime - lastCreateTime.value);
+    lastCreateTime.value = chatDateTime;
+    if (lastTimeDifference < 2 * 60 * 1000) {
+      return "hidden";
+    }
+  }
+
+  lastCreateTime.value = chatDateTime;
+
+  // 如果是今天
+  if (chatDate.getTime() === todayDate.getTime()) {
+    // 如果是1分钟内
+    const timeDifference = Math.abs(now - chatDateTime);
+    if (timeDifference < 60 * 1000) {
+      return "刚刚";
+    }
+    return time.slice(11, 16);
+  }
+
+  return time.slice(0, 16);
+};
 
 // 查看笔记内容
 const showBlogContent = (id) => {
@@ -84,7 +84,150 @@ const showUserPage = (id) => {
 // 发送消息
 const sheetVisible = ref(false);
 const messageInput = ref("");
+const replyMsgId = ref(0);
+const sendMessage = async () => {
+  let toUserId = 0;
+  let groupId = parseInt(route.query.id);
+  if (route.query.isSingleChat == 1) {
+    toUserId = parseInt(route.query.id);
+    groupId = 0;
+  }
+  const chatParam = {
+    toUserId: toUserId,
+    groupId: groupId,
+    isSingleChat: parseInt(route.query.isSingleChat),
+    type: 0,
+    text: messageInput.value,
+    image: null,
+    blogId: 0,
+    replyMsgId: replyMsgId.value,
+  };
+  const result = await sendMessageService(chatParam);
+  if (result.code === 0) {
+    sheetVisible.value = false;
+    messageInput.value = "";
+    nextTick(() => {
+      scrollBottom();
+    });
+  }
+};
 
+const showInputSheet = (isReply) => {
+  sheetVisible.value = true;
+  if (!isReply) {
+    if (replyMsgId.value !== 0) {
+      messageInput.value = "";
+    }
+    replyMsgId.value = 0;
+  }
+};
+
+// 回复消息
+const popoverVisible = ref(false);
+const popoverRef = ref();
+const replyMsgType = ref(0);
+const replyMsgUsername = ref("");
+const replyMsgText = ref(0);
+const replyMsgBlogTitle = ref("");
+const showPopover = (id, type, username, text, title, index) => {
+  popoverVisible.value = true;
+  if (replyMsgId.value !== id) {
+    messageInput.value = "";
+  }
+  replyMsgId.value = id;
+  replyMsgType.value = type;
+  replyMsgUsername.value = username;
+  replyMsgText.value = text;
+  replyMsgBlogTitle.value = title;
+
+  if (popoverVisible.value) {
+    const msgTop = document
+      .getElementsByClassName("msg-content")
+      [index].getBoundingClientRect().top;
+
+    console.log(
+      document.getElementsByClassName("msg-content")[index].offsetTop
+    );
+
+    const msgLeft =
+      document.getElementsByClassName("msg-content")[index].offsetLeft;
+    const msgWidth =
+      document.getElementsByClassName("content")[index].offsetWidth;
+    nextTick(() => {
+      const popoverHeight = popoverRef.value.offsetHeight;
+      const popoverWidth = popoverRef.value.offsetWidth;
+      const popoverTop = msgTop - popoverHeight - 8;
+      const popoverLeft = msgLeft + msgWidth / 2 - popoverWidth / 2;
+      popoverRef.value.style =
+        `top:` + popoverTop + `px;left:` + popoverLeft + `px`;
+    });
+  }
+};
+
+// 长按出现popover
+let blogTimeOutEvent;
+let isPressAndHold = false;
+const goTouchStart = (id, type, username, text, title, index) => {
+  isPressAndHold = false;
+  clearTimeout(blogTimeOutEvent);
+  blogTimeOutEvent = setTimeout(() => {
+    // 如果点击超过了600ms
+    isPressAndHold = true;
+    showPopover(id, type, username, text, title, index);
+  }, 600);
+};
+
+const goTouchEnd = (type, blogId) => {
+  clearTimeout(blogTimeOutEvent);
+  // 如果长按小于600ms
+  if (!isPressAndHold) {
+    popoverVisible.value = false;
+    if (type == 2) {
+      showBlogContent(blogId);
+    }
+  }
+};
+
+// 点击其他元素关闭popover
+const closePopover = () => {
+  popoverVisible.value = false;
+};
+
+onMounted(() => {
+  document.addEventListener("click", closePopover);
+});
+onUnmounted(() => {
+  document.removeEventListener("click", closePopover);
+});
+
+// 接收websocket传来的消息
+import { useWebSocket } from "@vueuse/core";
+
+// let key = "user" + route.query.id;
+// if (route.query.isSingleChat == 0) {
+//   key = "group" + route.query.id;
+// }
+
+const { status, data, send, open, close } = useWebSocket(
+  "ws://localhost:8080/ws/chat/" + userInfoStore.userInfo.id
+);
+
+watch(data, () => {
+  //获取到的数据为data.value
+  const wsData = JSON.parse(data.value);
+  const newChat = JSON.parse(JSON.stringify(chat.value));
+  wsData.createTime = calTime(wsData.createTime);
+  newChat.chatContent.push(wsData);
+  chat.value = newChat;
+});
+
+// 进入聊天界面和发消息时，让滚动条保持在底部
+const scrollBottom = () => {
+  const container = document.getElementsByClassName("chat-container")[0];
+  container.scrollTop = container.scrollHeight;
+};
+
+// 计算容器大小
 const calDOM = () => {
   const bodyHeight = document.documentElement.clientHeight;
   const headerHeight =
@@ -101,6 +244,20 @@ const calDOM = () => {
 </script>
 
 <template>
+  <div class="popover" v-show="popoverVisible" ref="popoverRef">
+    <div class="popover-item">
+      <img src="../../../../public/images/icon/copy.png" alt="" />
+      复制
+    </div>
+    <div class="popover-item" @click="showInputSheet(true)">
+      <img src="../../../../public/images/icon/reply.png" alt="" />
+      回复
+    </div>
+    <div class="popover-item">
+      <img src="../../../../public/images/icon/repost.png" alt="" />
+      转发
+    </div>
+  </div>
   <div class="header">
     <RectLeft @click="router.back()" />
     <img
@@ -172,44 +329,59 @@ const calDOM = () => {
             {{ item.username }}
           </div>
           <div
-            class="content text"
-            :class="
-              item.fromUserId == userInfoStore.userInfo.id ? 'my-text' : ''
+            class="msg-content"
+            @touchstart.prevent="
+              goTouchStart(
+                item.id,
+                item.type,
+                item.username,
+                item.text,
+                item.title,
+                index
+              )
             "
-            v-if="item.type === 0"
+            @touchend.prevent="goTouchEnd(item.type, item.blogId)"
           >
-            {{ item.text }}
-          </div>
+            <div
+              class="content text"
+              :class="
+                item.fromUserId == userInfoStore.userInfo.id ? 'my-text' : ''
+              "
+              v-if="item.type === 0"
+            >
+              {{ item.text }}
+            </div>
 
-          <img
-            class="content image"
-            :src="item.image"
-            alt=""
-            v-if="item.type === 1"
-          />
+            <img
+              class="content image"
+              :src="item.image"
+              alt=""
+              v-if="item.type === 1"
+            />
 
-          <div
-            class="content chat-blog"
-            v-if="item.type === 2"
-            @click="showBlogContent(item.blogId)"
-          >
-            <img class="blog-cover" :src="item.blogCover" alt="" />
-            <div class="chat-blog-info">
-              {{ item.title }}
-              <div class="avatar-name">
-                <img
-                  class="avatar"
-                  src="../../../../public/images/icon/default-avatar.png"
-                  alt=""
-                  v-if="item.authorAvatar === null || item.authorAvatar === ''"
-                />
-                <img
-                  class="avatar"
-                  :src="item.authorAvatar"
-                  alt=""
-                  v-if="item.authorAvatar !== null && item.authorAvatar !== ''"
-                />
-                {{ item.author }}
+            <div class="content chat-blog" v-if="item.type === 2">
+              <img class="blog-cover" :src="item.blogCover" alt="" />
+              <div class="chat-blog-info">
+                {{ item.title }}
+                <div class="avatar-name">
+                  <img
+                    class="avatar"
+                    src="../../../../public/images/icon/default-avatar.png"
+                    alt=""
+                    v-if="
+                      item.authorAvatar === null || item.authorAvatar === ''
+                    "
+                  />
+                  <img
+                    class="avatar"
+                    :src="item.authorAvatar"
+                    alt=""
+                    v-if="
+                      item.authorAvatar !== null && item.authorAvatar !== ''
+                    "
+                  />
+                  {{ item.author }}
+                </div>
               </div>
             </div>
           </div>
@@ -234,7 +406,7 @@ const calDOM = () => {
     </div>
   </div>
   <div class="bottom">
-    <div class="input-button" @click="sheetVisible = true">
+    <div class="input-button" @click="showInputSheet(false)">
       <Edit />
       <div class="placeholder">发消息...</div>
     </div>
@@ -249,10 +421,16 @@ const calDOM = () => {
           placeholder="发消息..."
           autofocus
         />
+        <div class="reply-msg-container" v-if="replyMsgId !== 0">
+          回复@{{ replyMsgUsername }}：
+          <span v-if="replyMsgType === 0">{{ replyMsgText }}</span>
+          <span v-if="replyMsgType === 1">[图片]</span>
+          <span v-if="replyMsgType === 2">[笔记]{{ replyMsgBlogTitle }}</span>
+        </div>
         <nut-button
           color="var(--theme-color)"
           :disabled="messageInput === ''"
-          @click="postBlogComment"
+          @click="sendMessage"
           >发送</nut-button
         >
       </div>
@@ -261,6 +439,37 @@ const calDOM = () => {
 </template>
 
 <style scoped>
+.popover {
+  width: 15rem;
+  height: 6rem;
+  position: absolute;
+  background-color: var(--grey-bg3);
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  border-radius: 1rem;
+  font-size: 1.4rem;
+  color: #fff;
+  z-index: 999;
+}
+.popover::after {
+  content: "";
+  width: 0;
+  height: 0;
+  position: absolute;
+  bottom: -1.5rem;
+  border: 0.8rem solid transparent;
+  border-top-color: var(--grey-bg3);
+}
+.popover .popover-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.popover img {
+  width: 2.5rem;
+}
+
 .header {
   width: 100%;
   height: 8rem;
@@ -306,6 +515,9 @@ const calDOM = () => {
 .my-chat-list .avatar {
   margin-left: 1rem;
   margin-right: 0;
+}
+.msg-content {
+  position: relative;
 }
 .name-content {
   display: flex;
@@ -425,5 +637,16 @@ const calDOM = () => {
 
 .input-action-sheet ::v-deep(.nut-popup) {
   border-radius: 0 !important;
+}
+
+.reply-msg-container {
+  width: 100%;
+  background-color: var(--grey-bg);
+  font-size: 1.4rem;
+  padding: 1rem;
+  box-sizing: border-box;
+  margin-top: 1rem;
+  border-radius: 1rem;
+  color: var(--theme-color-grey-text);
 }
 </style>
