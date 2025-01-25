@@ -1,29 +1,13 @@
-#  vue-comment-app
+### 后端代码链接：[https://github.com/EchoCreator/BlueTalkProject/tree/master](https://github.com/EchoCreator/BlueTalkProject/tree/master)
+### 前端代码链接：[https://github.com/EchoCreator/BlueTalkVueClient](https://github.com/EchoCreator/BlueTalkVueClient)
+|登陆注册|‘我’的首页|其他用户首页|笔记瀑布流|商品列表|
+|-|-|-|-|-|
+|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/1.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/2.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/14.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/3.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/4.png)|
 
-This template should help get you started developing with Vue 3 in Vite.
+|商品详情|商品评论|优惠券抢购|聊天历史列表|聊天页面|
+|-|-|-|-|-|
+|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/5.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/6.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/7.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/8.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/9.png)|
 
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+|笔记评论区|关注/粉丝列表|‘我的’点赞收藏|发布笔记|
+|-|-|-|-|
+|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/10.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/11.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/12.png)|![](https://github.com/EchoCreator/BlueTalkVueClient/blob/main/public/images/bluetalk-demo/13.png)|
